@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/BoardDetail_style.css";
+import { API_BASE_URL } from "../config.js";
+
 const BoardDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -9,9 +11,7 @@ const BoardDetail = () => {
 
   const getBoard = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/board?writingId=${id}`
-      );
+      const response = await axios.get(`${API_BASE_URL}/board?writingId=${id}`);
 
       setBoard(response.data);
     } catch (error) {

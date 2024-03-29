@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/Board_style.css";
+import { API_BASE_URL } from "../config.js";
+
 const Board = () => {
   const navigate = useNavigate();
   const [boardList, setBoardList] = useState([]);
@@ -16,7 +18,7 @@ const Board = () => {
 
   const getBoardList = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/board/me");
+      const response = await axios.get(`${API_BASE_URL}/board/me`);
       setBoardList(response.data);
       setTotalPages(Math.ceil(response.data.length / postsPerPage));
     } catch (error) {

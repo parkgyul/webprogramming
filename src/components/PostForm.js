@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/PostForm_style.css";
+import { API_BASE_URL } from "../config.js";
+
 const PostForm = ({ addPost }) => {
   const navigate = useNavigate();
   const [writer, setWriter] = useState("");
@@ -10,7 +12,7 @@ const PostForm = ({ addPost }) => {
   const savePost = async (e) => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/board",
+        `${API_BASE_URL}/board`,
         {
           writer: writer,
           title: title,
