@@ -29,7 +29,7 @@ const BoardDetail = () => {
 
   const deletePost = async () => {
     if (window.confirm("게시글을 삭제하시겠습니까?")) {
-      await axios.delete(`http://localhost:8080/board/${id}`);
+      await axios.delete(`${API_BASE_URL}/board/${id}`);
       alert("삭제되었습니다.");
       navigate("/");
     }

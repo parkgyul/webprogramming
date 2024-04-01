@@ -21,7 +21,7 @@ const PostEditForm = () => {
 
   const getPost = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}?writingId=${id}`);
+      const response = await axios.get(`${API_BASE_URL}/board?writingId=${id}`);
       setPost(response.data);
     } catch (error) {
       console.error("불러오지 못함", error);
@@ -32,11 +32,7 @@ const PostEditForm = () => {
   };
   const updatePost = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:8080/board/${id}`,
-        post
-      );
-      console.log(post);
+      const response = await axios.put(`${API_BASE_URL}/board/${id}`, post);
       if (response.status === 200) {
         alert("수정되었습니다.");
         navigate("/board/" + id);
@@ -52,6 +48,7 @@ const PostEditForm = () => {
   useEffect(() => {
     getPost();
   }, []);
+
   return (
     <div>
       <h2 class style={{ textAlign: "center" }}>

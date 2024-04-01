@@ -9,8 +9,8 @@ const Board = () => {
   const navigate = useNavigate();
   const [boardList, setBoardList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10); // Number of posts per page, default: 5
-  const [totalPages, setTotalPages] = useState(1); // Total number of pages
+  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     getBoardList();
