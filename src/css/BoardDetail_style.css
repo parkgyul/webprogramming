@@ -1,0 +1,51 @@
+.board-detail-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.board-detail-content {
+  width: 80%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white; /* Set background color to white */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.board-detail-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.board-detail-info {
+  margin-bottom: 20px;
+}
+
+.board-detail-info h5 {
+  margin: 0;
+}
+
+.board-detail-body {
+  margin-bottom: 20px;
+}
+
+.board-detail-button-group {
+  text-align: center;
+}
+
+.board-detail-button-group button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.board-detail-button-group button:last-child {
+  margin-right: 0;
+  background-color: #dc3545;
+}

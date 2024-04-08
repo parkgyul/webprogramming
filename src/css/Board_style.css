@@ -1,0 +1,96 @@
+ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items at the beginning of each row */
+  justify-content: center; /* Center items vertically */
+  /* Set the height of the container to 100% of the viewport height */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+}
+
+li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px; /* Adjust padding as needed */
+  border-bottom: 1px solid #ddd; /* Add a bottom border for separation */
+}
+
+li > * {
+  margin-right: 10px; /* Add space between items */
+}
+
+li > *:last-child {
+  margin-right: 0; /* Remove margin for the last item */
+}
+
+li > *:first-child {
+  font-weight: bold; /* Make the first cell bold */
+}
+
+.board-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.board-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.board-button button {
+  background-color: #000;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #fff;
+}
+.board-button button:hover {
+  background-color: gray;
+}
+
+.board-button {
+  float: right;
+  margin-bottom: 20px;
+}
+
+.board-posts {
+  list-style: none;
+  padding: 0;
+}
+
+.board-post-item {
+  margin-bottom: 10px;
+}
+
+.board-pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.board-pagination button {
+  margin-right: 5px;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: rgb(218, 216, 216);
+  color: #fff;
+  cursor: pointer;
+}
+.board-pagination button.selected {
+  background-color: black;
+  color: #fff;
+}
+.board-pagination button:hover {
+  background-color: gray;
+}
+
+.board-posts-per-page {
+  float: right;
+}
+
+.board-post-item span {
+  font-size: 12px;
+  color: #666;
+}
