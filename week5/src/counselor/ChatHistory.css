@@ -1,0 +1,20 @@
+.chat-container {
+  max-width: 400px; /* 채팅창 최대 너비 설정 */
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
+.chat-message {
+  padding: 8px 12px; /* 메시지의 간격 및 여백 설정 */
+  border-radius: 8px; /* 메시지 테두리를 둥글게 만듦 */
+  margin-bottom: 8px; /* 각 메시지 아래 여백 설정 */
+}
+
+.user-message {
+  background-color: #c3e88d; /* 상담자 메시지의 배경색 설정 */
+  margin-right: 20%; /* 오른쪽으로 정렬 */
+}
+
+.counselor-message {
+  background-color: #90caf9; /* 상담사 메시지의 배경색 설정 */
+  margin-left: 20%; /* 왼쪽으로 정렬 */
+}

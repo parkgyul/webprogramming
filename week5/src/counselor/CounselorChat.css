@@ -1,0 +1,57 @@
+/* CounselorChat.css */
+
+.counselor-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  width: 400px;
+  background-color: #d2dee5;
+  border-radius: 5px;
+}
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.message {
+  max-width: 70%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.sent {
+  align-self: flex-end;
+  background-color: hsl(211, 58%, 38%);
+  color: white;
+}
+
+.received {
+  align-self: flex-start;
+  background-color: #f2f2f2;
+}
+
+.message-input {
+  width: 301px;
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #dadada;
+  border-radius: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.send-button {
+  padding: 10px 20px;
+  background-color: #457ab6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #4a88c9;
+}
