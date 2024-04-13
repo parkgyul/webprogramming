@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SelectRolePage />} />
         <Route path="/counselor" element={<CounselorPage />} />
-        <Route path="/client" element={<ClientPage />} />
+        <Route path="/client/:id" element={<ClientPage />} />
         <Route path="/record/:id" element={<CounselorHistory />} />
       </Routes>
     </Router>

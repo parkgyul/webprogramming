@@ -7,6 +7,8 @@ import "./selectRolePage.css"; // 스타일 파일 import
 const SelectRolePage = () => {
   const [role, setRole] = useState("counselor");
   const [name, setName] = useState("");
+  const [id, setId] = useState("");
+
   const navigate = useNavigate();
 
   const handleRoleChange = (event) => {
@@ -27,8 +29,12 @@ const SelectRolePage = () => {
         const response = await axios.post(`${REST_API_URL}/chat/room`, {
           clientName: name,
         });
+        setId(response.data.response);
+        console.log(id);
         if (response.status === 200) {
-          navigate("/client", { state: { client_name: name } });
+          navigate(`/client/${response.data.response}`, {
+            state: { client_name: name },
+          });
         } else {
           console.error("POST 요청 실패");
         }

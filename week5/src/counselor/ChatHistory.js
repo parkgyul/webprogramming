@@ -14,6 +14,7 @@ const ChatHistory = () => {
       try {
         const response = await axios.get(`${REST_API_URL}/room/${id}`); // 채팅 내용을 가져오는 API 엔드포인트
         setMessages(response.data); // 가져온 채팅 내용을 상태에 설정
+        console.log("room/id", response.data);
       } catch (error) {
         console.error("채팅 내용을 가져오는 데 실패했습니다:", error);
       }

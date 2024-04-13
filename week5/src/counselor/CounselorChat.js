@@ -13,7 +13,7 @@ const CounselorChat = () => {
 
     newSocket.onmessage = (event) => {
       const receivedMessage = JSON.parse(event.data);
-      setMessages([...messages, receivedMessage]);
+      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
     };
 
     setSocket(newSocket);
@@ -21,7 +21,7 @@ const CounselorChat = () => {
     return () => {
       newSocket.close();
     };
-  }, [messages]);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -31,9 +31,10 @@ const CounselorChat = () => {
 
   const sendMessage = () => {
     const message = {
-      writer: "counselor",
-      content: newMessage,
+      from: "counselor", // 송신자 정보 추가
+      text: newMessage,
     };
+    setMessages((prevMessages) => [...prevMessages, message]);
     if (socket) {
       socket.send(JSON.stringify(message));
     }
@@ -44,13 +45,16 @@ const CounselorChat = () => {
     <div className="counselor-chat-container">
       <div className="messages-container">
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${
-              message.from === "counselor" ? "sent" : "received"
-            }`}
-          >
-            {message.text}
+          <div>
+            <span>{message.from}</span>
+            <div
+              key={index}
+              className={`message ${
+                message.from === "counselor" ? "sent" : "received"
+              }`}
+            >
+              {message.text}
+            </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
