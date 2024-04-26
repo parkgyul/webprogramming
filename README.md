@@ -1,3 +1,9 @@
+게시판 (글만 가능)
+등록, 수정, 삭제 가능 
+pagination 기능 
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
