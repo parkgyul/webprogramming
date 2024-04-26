@@ -1,0 +1,29 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/webprogramming?autoReconnect=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: Pk11032828?
+
+
+  jwt:
+    secret: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxMTM2MDk1MywiaWF0IjoxNzExMzYwOTUzfQ.DZzz_c2IrVkUDrhK1rRLiHRZTCMG7fav1Nz7tZZ4RU0
+
+logging:
+  level:
+    org:
+    hibernate:
+      SQL: DEBUG
+    type:
+      descriptor:
+        sql:
+          BasicBinder: TRACE
