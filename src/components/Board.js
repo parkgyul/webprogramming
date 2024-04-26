@@ -18,9 +18,10 @@ const Board = () => {
 
   const getBoardList = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/board/me`);
-      setBoardList(response.data);
-      setTotalPages(Math.ceil(response.data.length / postsPerPage));
+      const response = await axios.get(`${API_BASE_URL}/board`);
+      console.log(response.data.response);
+      setBoardList(response.data.response);
+      setTotalPages(Math.ceil(response.data.response.length / postsPerPage));
     } catch (error) {
       console.error("불러오지 못함", error);
     }

@@ -18,5 +18,3 @@ RUN npm run build
 
 # 앱을 실행합니다.
 CMD ["npm", "start"]
-
-RUN chmod +x /usr/local/bin/npm

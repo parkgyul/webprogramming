@@ -11,9 +11,9 @@ const BoardDetail = () => {
 
   const getBoard = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/board?writingId=${id}`);
-
-      setBoard(response.data);
+      const response = await axios.get(`${API_BASE_URL}/board/${id}`);
+      console.log(response.data.response);
+      setBoard(response.data.response);
     } catch (error) {
       console.error("불러오지 못함", error);
     }
@@ -49,6 +49,7 @@ const BoardDetail = () => {
         </div>
         <hr />
         <p className="board-detail-body">{board.body}</p>
+
         <hr />
         <div className="board-detail-button-group">
           <button onClick={moveToEdit}>수정</button>

@@ -24,7 +24,6 @@ const PostForm = ({ addPost }) => {
           },
         }
       );
-
       if (response.status === 200) {
         alert("게시물이 등록되었습니다.");
         navigate("/");
@@ -41,6 +40,18 @@ const PostForm = ({ addPost }) => {
     navigate("/");
   };
 
+  const [uploadImg1Url, setUploadImg1Url] = useState("");
+  const [uploadImg2Url, setUploadImg2Url] = useState("");
+
+  const onChangeImageUpload = (e, setImgUrl) => {
+    const { files } = e.target;
+    const uploadFile = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(uploadFile);
+    reader.onloadend = () => {
+      setImgUrl(reader.result);
+    };
+  };
   return (
     <div className="container">
       <div className="input-group">
@@ -64,13 +75,16 @@ const PostForm = ({ addPost }) => {
         />
       </div>
 
-      <textarea
-        placeholder="내용"
-        cols="100"
-        rows="10"
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-      />
+      <div>
+        <textarea
+          placeholder="내용"
+          cols="100"
+          rows="10"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+        />
+      </div>
+      <br />
 
       <div className="button-group">
         <button onClick={savePost}>저장</button>

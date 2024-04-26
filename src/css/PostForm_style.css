@@ -45,3 +45,15 @@ textarea {
   margin-right: 0;
   background-color: #dc3545;
 }
+
+.file-input {
+  margin-bottom: 10px;
+  border: 1px solid #ccc; /* Add border */
+  padding: 10px; /* Add padding */
+  border-radius: 5px; /* Add border radius */
+}
+
+/* Style for the image preview */
+.image-preview {
+  margin-bottom: 10px;
+}
