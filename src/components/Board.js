@@ -18,11 +18,11 @@ const Board = () => {
 
   const getBoardList = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/board/me`);
-      if (Array.isArray(response.data)) {
+      const response = await axios.get(`${API_BASE_URL}/board`);
+      if (Array.isArray(response.data.response)) {
         // 받아온 데이터가 배열인지 확인
-        setBoardList(response.data);
-        setTotalPages(Math.ceil(response.data.length / postsPerPage));
+        setBoardList(response.data.response);
+        setTotalPages(Math.ceil(response.data.response.length / postsPerPage));
       } else {
         throw new Error("서버로부터 올바른 데이터를 받지 못했습니다.");
       }

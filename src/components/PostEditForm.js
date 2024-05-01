@@ -21,8 +21,8 @@ const PostEditForm = () => {
 
   const getPost = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/board?writingId=${id}`);
-      setPost(response.data);
+      const response = await axios.get(`${API_BASE_URL}/board/${id}`);
+      setPost(response.data.response);
     } catch (error) {
       console.error("불러오지 못함", error);
     }

@@ -11,12 +11,13 @@ const BoardDetail = () => {
   const [images, setImages] = useState([]);
   const getBoard = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/board?writingId=${id}`);
-      setBoard(response.data);
+      const response = await axios.get(`${API_BASE_URL}/board/${id}`);
+      console.log(response.data.response.imageurls);
+      setBoard(response.data.response);
 
-      const fileIds = response.data.fileIds;
-      if (fileIds && fileIds.length > 0) {
-        getFileData(fileIds);
+      const imageurls = response.data.response.imageurls;
+      if (imageurls && imageurls.length > 0) {
+        getFileData(imageurls);
       }
     } catch (error) {
       console.error("불러오지 못함", error);
@@ -27,14 +28,7 @@ const BoardDetail = () => {
     try {
       const files = await Promise.all(
         fileIds.map(async (fileId) => {
-          const response = await axios.get(
-            `${API_BASE_URL}/board/file/${fileId}`,
-            { responseType: "arraybuffer" } // 바이너리 데이터를 받아오도록 설정
-          );
-          const arrayBufferView = new Uint8Array(response.data);
-          const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
-          const imageUrl = URL.createObjectURL(blob);
-          return imageUrl;
+          return fileId;
         })
       );
       setImages(files);
@@ -74,7 +68,12 @@ const BoardDetail = () => {
         <hr />
         <p className="board-detail-body">{board.body}</p>
         {images.map((imageUrl, index) => (
-          <img key={index} src={imageUrl} alt={`Image ${index}`} width="500" />
+          <img
+            key={index}
+            src={`data:image/png;base64, ${imageUrl}`}
+            alt={`Image ${index}`}
+            width="300"
+          />
         ))}
         <hr />
         <div className="board-detail-button-group">

@@ -16,18 +16,18 @@ const PostForm = ({ addPost }) => {
     e.preventDefault();
     const formData = new FormData();
 
-    if (image1) formData.append("uploadfile", image1);
-    if (image2) formData.append("uploadfile", image2);
+    if (image1) formData.append("files", image1);
+    if (image2) formData.append("files", image2);
 
-    const writingRequestData = {
+    const boardRequestData = {
       writer: writer,
       title: title,
       body: body,
     };
-    const blob = new Blob([JSON.stringify(writingRequestData)], {
+    const blob = new Blob([JSON.stringify(boardRequestData)], {
       type: "application/json",
     });
-    formData.append("writingRequest", blob);
+    formData.append("boardRequest", blob);
 
     for (let value of formData.values()) {
       console.log(value);
@@ -40,11 +40,6 @@ const PostForm = ({ addPost }) => {
       });
       if (response.status === 200) {
         alert("게시물이 등록되었습니다.");
-        console.log(response.data);
-        /*localStorage.setItem(
-          response.data.id,
-          JSON.stringify(response.data.fileUrls)
-        );*/
         navigate("/");
       } else {
         throw new Error("게시물 등록 실패");
