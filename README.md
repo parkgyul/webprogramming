@@ -1,3 +1,6 @@
+(+) 게시판 기능 : 이미지 추가하기
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
