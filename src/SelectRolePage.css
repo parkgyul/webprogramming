@@ -1,0 +1,39 @@
+/* SelectRolePage.css */
+
+.select-role-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  margin-top: 20px;
+}
+
+.form-container label {
+  margin-right: 10px;
+}
+
+.name-input-container {
+  margin-top: 10px;
+}
+
+.name-input {
+  margin-left: 5px;
+}
+
+.submit-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #406fa1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #6a9ed6;
+}
