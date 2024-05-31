@@ -11,6 +11,7 @@ import webprogramming.week5.websocket.client.repository.ClientRepository;
 import webprogramming.week5.websocket.room.entity.Room;
 import webprogramming.week5.websocket.room.repository.RoomRepository;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class ClientService {
         // 클라이언트 저장 후 방 생성
         Room room = Room.builder()
                 .client(client)
+                .current(new Date())
                 .build();
         roomRepository.save(room);
 

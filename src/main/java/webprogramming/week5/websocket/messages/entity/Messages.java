@@ -18,8 +18,8 @@ public class Messages {
     @Column(name = "message_id")
     private Long id;
 
-    @Column(name = "from")
-    private String from;
+    @Column(name = "sender")
+    private String sender;
 
     @Column(name = "message")
     private String message;
@@ -29,8 +29,8 @@ public class Messages {
     private Room room;
 
     @Builder
-    public Messages(String from, String message, Room room){
-        this.from = from;
+    public Messages(String sender, String message, Room room){
+        this.sender = sender;
         this.message = message;
         this.room = room;
     }

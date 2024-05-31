@@ -9,6 +9,7 @@ import webprogramming.week5.websocket.client.entity.Client;
 import webprogramming.week5.websocket.messages.entity.Messages;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -29,9 +30,11 @@ public class Room {
     @OneToMany(mappedBy = "room")
     private List<Messages> messages = new ArrayList<>();
 
+    private Date current;
     @Builder
-    public Room(Client client){
+    public Room(Client client,Date current){
         this.client = client;
+        this.current=current;
     }
 
 }

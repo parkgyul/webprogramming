@@ -24,7 +24,7 @@ public class MessagesService {
     public Long saveMessage(MessageSaveRequest messageSaveRequest){
 
         Messages messages =Messages.builder()
-                .from(messageSaveRequest.from())
+                .sender(messageSaveRequest.sender())
                 .message(messageSaveRequest.message())
                 .room(roomRepository.getById(messageSaveRequest.room_id()))
                 .build();
@@ -34,14 +34,14 @@ public class MessagesService {
         return messages.getId();
     }
 
-    public List<MessagesReadResponse> getAllMessages(){
+    public List<MessagesReadResponse> getAllMessages(Long roomId){
         try{
-            List<Messages> messagesList = messagesRepository.findAll();
+            List<Messages> messagesList = messagesRepository.findByRoomId(roomId);
             List<MessagesReadResponse> responseList = new ArrayList<>();
 
             for(Messages messages: messagesList){
                 responseList.add(
-                        new MessagesReadResponse(messages.getFrom(), messages.getMessage())
+                        new MessagesReadResponse(messages.getSender(), messages.getMessage(), messages.getRoom().getId())
                 );
             }
             return responseList;

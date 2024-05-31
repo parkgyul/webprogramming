@@ -3,8 +3,10 @@ package webprogramming.week5.websocket.websocket;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import webprogramming.week5.websocket.config.ServerEndpointConfigurator;
 import webprogramming.week5.websocket.messages.dto.MessageSaveRequest;
 import webprogramming.week5.websocket.messages.service.MessagesService;
@@ -15,6 +17,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+
+
+@Service
 @ServerEndpoint(value = "/socket/counselor", configurator = ServerEndpointConfigurator.class)
 @Slf4j
 @RequiredArgsConstructor
@@ -22,30 +27,31 @@ public class CounselorSocket {
     private static Session counselor = null;
     private final MessagesService messagesService;
     private final RoomService roomService;
-    private Long roomId;
+    private static long RoomNumber = 0;
+    public void setRoomNumber(long roomId) {
+        RoomNumber = roomId;
+        log.info("setRoomNumber 바뀜 {}", RoomNumber);
+    }
+    public static Session getCounselor() {return counselor;}
+    private static volatile boolean counselorReady = false; // 상담원 준비 상태를 나타내는 플래그
 
+    public static boolean isCounselorReady() {
+        return counselorReady;
+    }
     @OnOpen
     public void websocketOpen(Session session) throws IOException {
-        counselor = session;
-        // roomId를 설정하는 로직 추가 필요
-        // 예를 들어, 쿼리 파라미터로 roomId를 전달받는 경우
-        // roomId = Long.parseLong(session.getRequestParameterMap().get("roomId").get(0));
-        Map<String, List<String>> queryParams = session.getRequestParameterMap();
-        if (queryParams.containsKey("roomId")) {
-            try {
-                roomId = Long.parseLong(queryParams.get("roomId").get(0));
-                roomService.addCounselorSession(roomId, session);
-                log.info("Counselor connected to room ID: {}", roomId);
-            } catch (NumberFormatException e) {
-                log.error("Invalid roomId format: {}", queryParams.get("roomId").get(0));
-                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Invalid roomId format"));
-            }
-        } else {
-            log.error("roomId query parameter is missing");
-            session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Missing roomId query parameter"));
+        if (session == null) {
+            log.error("Session is null in websocketOpen");
+            return;
         }
-        roomService.addCounselorSession(roomId, session);
+        counselor = session;
+
+        counselorReady = true; // 상담원이 접속됨을 표시
+        log.info("Counselor session opened: {}", session.getId());
+        log.info("Counselor session opened: {}", counselor.getId());
+        roomService.addCounselorSession(RoomNumber, session);
     }
+
 
     @OnMessage
     public void handleMessage(String message, Session session) throws IOException {
@@ -53,12 +59,13 @@ public class CounselorSocket {
 
         try {
             Map<String, Object> messageMap = new ObjectMapper().readValue(message, Map.class);
-            Long roomId = ((Integer) messageMap.get("chatRoomId")).longValue();
-            String from = (String) messageMap.get("from");
-            String mes = (String) messageMap.get("message");
+            Object roomIdObject = messageMap.get("roomId");
+            Long roomId = (roomIdObject instanceof Integer) ? ((Integer) roomIdObject).longValue() : Long.parseLong((String) roomIdObject);
+            String sender = (String) messageMap.get("sender");
+            String mes = (String) messageMap.get("mes");
 
             MessageSaveRequest messageSaveRequest = MessageSaveRequest.builder()
-                    .from(from)
+                    .sender(sender)
                     .message(mes)
                     .room_id(roomId).build();
             messagesService.saveMessage(messageSaveRequest);
@@ -74,8 +81,10 @@ public class CounselorSocket {
 
     @OnClose
     public void handleClose(Session session) {
-        roomService.removeCounselorSession(roomId);
+        counselorReady = false; // 상담원이 접속을 종료함을 표시
         counselor = null;
-        log.info("counselor session close : {}", session.getId());
+        log.info("Counselor session closed: {}", session.getId());
     }
+
+
 }
