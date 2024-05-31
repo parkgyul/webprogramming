@@ -14,6 +14,11 @@ html {
   border-radius: 15px !important;
   background-color: rgba(13, 25, 88, 0.55) !important;
 }
+.card2 {
+  height: 15vh;
+  border-radius: 15px !important;
+  background-color: rgba(172, 184, 245, 0.55) !important;
+}
 .contacts_body {
   padding: 0.75rem 0 !important;
   overflow-y: auto;

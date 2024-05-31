@@ -19,18 +19,19 @@ const ClientPage = () => {
     const newSocket = new WebSocket(`${API_BASE_URL}/client`);
     setSocket(newSocket);
     newSocket.onmessage = (event) => {
-      const receivedMessage = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+      try {
+        const receivedMessage = JSON.parse(event.data);
 
-      const data = JSON.parse(receivedMessage);
+        const message = {
+          sender: receivedMessage.sender,
+          mes: receivedMessage.mes,
+          roomId: receivedMessage.roomId,
+        };
 
-      const message = {
-        from: data.from,
-        mes: data.mes,
-        roomId: data.roomId,
-      };
-
-      setMessages((prevMessages) => [...prevMessages, message]);
+        setMessages((prevMessages) => [...prevMessages, message]);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
     };
     if (socket) {
       socket.close();
@@ -44,7 +45,7 @@ const ClientPage = () => {
 
   const sendMessage = () => {
     const message = {
-      from: name,
+      sender: name,
       mes: newMessage,
       roomId: id,
     };
@@ -94,7 +95,7 @@ const ClientPage = () => {
             <div className="card-body msg_card_body">
               {messages.map((message, index) => (
                 <MessageItem
-                  type={`${message.from}`}
+                  type={`${message.sender}`}
                   text={`${message.mes}`}
                   image={user}
                 />

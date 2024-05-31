@@ -2,53 +2,100 @@ import React, { useEffect, useState } from "react";
 import "../chat.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { API_BASE_URL } from "../config.js";
-
+import { REST_API_URL, API_BASE_URL } from "../config.js";
+import axios from "axios";
 import "malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
-
 import user from "../user.png";
+import ChatHistory from "./ChatHistory";
+
 const CounselorPage = () => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [chatRoomId, setChatRoomId] = useState(null);
+  const [historyMessages, setHistoryMessages] = useState([]);
+  const [ing, setIng] = useState(false);
+  const [today, setToday] = useState(0);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const newSocket = new WebSocket(`${API_BASE_URL}/counselor`);
+
     setSocket(newSocket);
+
     newSocket.onmessage = (event) => {
       const receivedMessage = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
 
-      const data = JSON.parse(receivedMessage);
-
-      const message = {
-        from: data.from,
-        mes: data.mes,
-        roomId: data.roomId,
-      };
-
-      setMessages((prevMessages) => [...prevMessages, message]);
-    };
-    if (socket) {
-      socket.close();
-    }
-    return () => {
-      if (newSocket) {
-        newSocket.close();
+      if (receivedMessage.type === "roomId") {
+        setChatRoomId(receivedMessage.roomId);
+        setIng(true);
+      } else {
+        const message = {
+          sender: receivedMessage.sender,
+          mes: receivedMessage.mes,
+          roomId: receivedMessage.roomId,
+        };
+        setMessages((prevMessages) => [...prevMessages, message]);
       }
     };
-  });
+
+    return () => {
+      newSocket.close();
+    };
+  }, []);
 
   const sendMessage = () => {
     const message = {
-      from: "counselor",
+      sender: "counselor",
       mes: newMessage,
+      roomId: chatRoomId,
     };
     setMessages((prevMessages) => [...prevMessages, message]);
     if (socket) {
       socket.send(JSON.stringify(message));
     }
     setNewMessage("");
+  };
+
+  useEffect(() => {
+    if (ing) {
+      const message = {
+        sender: "h",
+        mes: `채팅방 ${chatRoomId}번 상담이 시작되었습니다.`,
+        roomId: chatRoomId,
+      };
+      setMessages((prevMessages) => [...prevMessages, message]);
+    }
+    setIng(false);
+    getTodayNumber();
+    getTotalNumber();
+  }, [chatRoomId]);
+
+  const getTodayNumber = async () => {
+    try {
+      const response = await axios.get(`${REST_API_URL}/room/today`);
+      if (response.status === 200) {
+        console.log(response.data);
+        setToday(response.data.response);
+      } else {
+        console.error("today / get 요청 실패");
+      }
+    } catch (error) {
+      console.error("get 요청 실패:", error);
+    }
+  };
+  const getTotalNumber = async () => {
+    try {
+      const response = await axios.get(`${REST_API_URL}/room/total`);
+      if (response.status === 200) {
+        console.log(response.data);
+        setTotal(response.data.response);
+      } else {
+        console.error("today / get 요청 실패");
+      }
+    } catch (error) {
+      console.error("get 요청 실패:", error);
+    }
   };
 
   const MessageItem = ({ type, text, image }) => (
@@ -68,37 +115,84 @@ const CounselorPage = () => {
       {type === "counselor" && <div className="img_cont_msg"></div>}
     </div>
   );
+
+  const getChatMessage = async (roomId) => {
+    try {
+      const response = await axios.get(`${REST_API_URL}/messages/${roomId}`);
+      if (response.status === 200) {
+        console.log(response.data);
+        setHistoryMessages("");
+        setHistoryMessages(response.data.response); // 메시지 목록을 업데이트합니다.
+        ChatMessageHistory(roomId);
+      } else {
+        console.error("get 요청 실패");
+      }
+    } catch (error) {
+      console.error("get 요청 실패:", error);
+    }
+  };
+
+  const ChatMessageHistory = (roomId) => {
+    return (
+      <div className="col-md-4 col-xl-3 chat">
+        <div className="card">
+          <div className="card-header msg_head">
+            <div className="d-flex bd-highlight">
+              <div className="img_cont">
+                <img
+                  src={user}
+                  className="rounded-circle user_img"
+                  alt="user"
+                />
+              </div>
+              {historyMessages.length > 0 && historyMessages[0].roomId && (
+                <div className="user_info">
+                  <span>"{`${historyMessages[0].roomId}`}"번방의 상담내역</span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="card-body msg_card_body">
+            {historyMessages.map((message) => (
+              <MessageItem
+                type={`${message.sender}`}
+                text={`${message.message}`}
+                image={user}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+  const onSelectChat = (roomId) => {
+    getChatMessage(roomId);
+  };
+
+  const Number = () => {
+    return (
+      <div className="col-md-1 col-xl-2 ">
+        <div className="card2">
+          <br />
+          <div style={{ textAlign: "center" }}>
+            <h5>total : {total}</h5>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <h5>today : {today}</h5>
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <div className="container-fluid h-100">
       <div className="row justify-content-center h-100">
-        <div className="col-md-4 col-xl-3 chat">
-          <div className="card mb-sm-3 mb-md-0 contacts_card">
-            <div className="card-header">
-              <div className="input-group">
-                <input
-                  type="text"
-                  placeholder="채팅목록"
-                  name=""
-                  className="form-control search"
-                />
-                {/*<div className="input-group-prepend">
-                    <span className="input-group-text search_btn">
-                      <i className="fas fa-search"></i>
-                    </span>
-    </div>*/}
-              </div>
-            </div>
-            <div className="card-body contacts_body">
-              <ul className="contacts">
-                <ContactItem name="Khalid" image={user} />
-              </ul>
-            </div>
-            <div className="card-footer"></div>
-          </div>
-        </div>
+        {Number()}
+        {ChatMessageHistory()}
+        <ChatHistory onSelectChat={onSelectChat} />
 
         {/*여기서 부터 채팅 */}
-        <div className="col-md-8 col-xl-6 chat">
+        <div className="col-md-5 col-xl-4 chat">
           <div className="card">
             <div className="card-header msg_head">
               <div className="d-flex bd-highlight">
@@ -111,14 +205,14 @@ const CounselorPage = () => {
                   <span className="online_icon"></span>
                 </div>
                 <div className="user_info">
-                  <span>Chat with Khalid</span>
+                  <span>{chatRoomId} 님 상담중</span>
                 </div>
               </div>
             </div>
             <div className="card-body msg_card_body">
-              {messages.map((message, index) => (
+              {messages.map((message) => (
                 <MessageItem
-                  type={`${message.from}`}
+                  type={`${message.sender}`}
                   text={`${message.mes}`}
                   image={user}
                 />
@@ -152,18 +246,5 @@ const CounselorPage = () => {
     </div>
   );
 };
-
-const ContactItem = ({ name, image }) => (
-  <li>
-    <div className="d-flex bd-highlight">
-      <div className="img_cont">
-        <img src={image} className="rounded-circle user_img" alt="user" />
-      </div>
-      <div className="user_info">
-        <span>{name}</span>
-      </div>
-    </div>
-  </li>
-);
 
 export default CounselorPage;
